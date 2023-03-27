@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace chat_client
 {
@@ -22,22 +23,15 @@ namespace chat_client
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        string messages = string.Empty;
         public MainWindow()
         {
             InitializeComponent();
             
+    
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            label.Content = input.Text;
-      
-            StartClient(input.Text);
-
-            input.Text = string.Empty;
-
-        }
+        
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -45,21 +39,21 @@ namespace chat_client
         }
 
 
-        public static void StartClient(String message)
+        public static String StartClient(String message)
         {
             byte[] bytes = new byte[1024];
-
+            String res = "not working";
             try
             {
 
                 //localhost
-                IPHostEntry host = Dns.GetHostEntry("localhost");
+                /*IPHostEntry host = Dns.GetHostEntry("localhost");
                 IPAddress ipAddress = host.AddressList[0];
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress, 6000);
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, 6000);*/
 
                 //working with server
-                /*IPAddress ipAddress = System.Net.IPAddress.Parse("172.104.250.232");
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress, 6000);*/
+                IPAddress ipAddress = System.Net.IPAddress.Parse("172.104.250.232");
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, 6000);
 
                 // Create a TCP/IP  socket.
                 Socket sender = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -78,8 +72,11 @@ namespace chat_client
                     // Send the data through the socket.
                     int bytesSent = sender.Send(msg);
 
+                    byte[] messageReceived = new byte[1024];
 
-
+                    int byteRecv = sender.Receive(messageReceived);
+                    res = Encoding.ASCII.GetString(messageReceived,0, byteRecv);
+                    
                     // Release the socket.
                     sender.Shutdown(SocketShutdown.Both);
                     sender.Close();
@@ -103,8 +100,27 @@ namespace chat_client
             {
                 Console.WriteLine(e.ToString());
             }
+            return res.Replace("<EOF>", string.Empty);
         }
 
+        private void connectbtn_Click(object sender, RoutedEventArgs e)
+        {
+            
+            
+            label.Content = StartClient("connected<EOF>") + Environment.NewLine;
+            sendBtn.IsEnabled = true;
 
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //  label.Content = input.Text;
+
+            if (messages == string.Empty) { chatMessage.Text = string.Empty; }
+            messages = StartClient(msgSend.Text + "<EOF>") + Environment.NewLine;
+            chatMessage.Text += messages;
+            msgSend.Text = string.Empty;
+        }
     }
 }

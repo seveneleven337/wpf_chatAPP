@@ -5,11 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:chat_client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid x:Name="btn">
-        <Button Content="Button" HorizontalAlignment="Left" Margin="415,140,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <TextBox x:Name="input" HorizontalAlignment="Left" Margin="253,140,0,0" TextWrapping="Wrap" Text="Milo" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
-        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="253,258,0,0" VerticalAlignment="Top"/>
+        Title="MainWindow" Height="900" Width="1250" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterScreen">
 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0"/>
+            <ColumnDefinition Width="55"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- background -->
+        <Border CornerRadius="0 0 0 0 " Background="Azure" Grid.Column="2" Grid.RowSpan="2"/>
+
+        <Border CornerRadius="0" Grid.RowSpan="2" Panel.ZIndex="2" Background="Purple" Grid.ColumnSpan="2">
+            <Grid>
+                <TextBlock Text="windows programming CHAT" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                       FontWeight="SemiBold" Margin="13,160,0,0" Width="386">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="270"></RotateTransform>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </Grid>
+        </Border>
+
+        <Border CornerRadius="0 20 20 0 " Background="white" Grid.Column="2" Grid.RowSpan="2">
+            <Grid x:Name="btn">
+                <Button x:Name="sendBtn" Content="Send" HorizontalAlignment="Left" Margin="968,776,0,0" VerticalAlignment="Top" Click="Button_Click" Height="46" Width="121" IsEnabled="false" />
+                <TextBox x:Name="msgSend" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="106,773,20,0" TextWrapping="Wrap" 
+                         Text="Write a text" VerticalAlignment="Top" Width="826" TextChanged="TextBox_TextChanged" Height="52" FontSize="20" MaxLength="1023" />
+                
+                <Border BorderBrush="Black" BorderThickness="1" CornerRadius="3.2" Margin="102,72,106,174" ></Border>
+                <TextBlock x:Name="chatMessage" TextWrapping="Wrap" Text="chat history" Margin="142,87,145,189" FontSize="20"/>
+                <Button x:Name="connectbtn" Content="Connect" HorizontalAlignment="Left" Margin="102,21,0,0" VerticalAlignment="Top" Height="46" Width="121" Click="connectbtn_Click" />
+                <Label x:Name="label" Height="46" Width="300" Content="disconnected" Margin="253,27,642,827" FontSize="16"></Label>
+            </Grid>
+        </Border>
     </Grid>
+
+
+
+
 </Window>
